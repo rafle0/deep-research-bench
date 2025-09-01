@@ -1,0 +1,386 @@
+Solving Asymmetric First-Price Sealed-Bid Auctions: A Theoretical Framework
+1. Introduction
+1.1 Defining the Problem
+The first-price sealed-bid auction (FPSB) represents a fundamental mechanism for allocating a single, indivisible item among competing bidders.1 In this format, prospective buyers simultaneously submit concealed bids. The auctioneer awards the item to the bidder who submitted the highest bid, and the winner pays the price they bid.1 Bidders who do not win pay nothing.1
+
+This report focuses on a specific, yet theoretically rich, variant of this auction: a scenario involving exactly two bidders where each bidder possesses an independent private value (IPV) for the item. The IPV assumption signifies that each bidder's valuation is known only to themselves and is drawn independently from potentially different probability distributions.2 Specifically, we consider the case of ex-ante asymmetry, where the bidders' value distributions, denoted by F1​(v) and F2​(v), are not identical (F1​=F2​).5 This contrasts with the standard symmetric IPV model, where all bidders' values are assumed to be drawn independently and identically from the same distribution F(v).5 It also differs from common value auction models, where the item's value is fundamentally the same for all bidders, but each bidder receives different private signals or estimates about this common value.2
+
+In the FPSB auction, a rational bidder aims to maximize their expected surplus, defined as their value for the item minus the price paid, conditional on winning.1 Bidding one's true value, vi​, is generally suboptimal, as it guarantees a surplus of zero even if the bidder wins (vi​−bi​=vi​−vi​=0).1 Therefore, bidders have an incentive to "shade" their bids, submitting a bid bi​<vi​ to secure a positive surplus upon winning.1 Determining the optimal amount of shading involves a trade-off: bidding lower increases the potential profit if one wins, but it also decreases the probability of submitting the highest bid and winning at all.3
+
+1.2 The Core Question
+The central inquiry addressed in this report is whether a general method exists for determining the equilibrium bidding strategies in these two-bidder asymmetric FPSB auctions with independent private values. The introduction of asymmetry, where bidders draw values from different distributions, significantly complicates the strategic analysis compared to the symmetric case.14 Even early pioneers like Vickrey noted the potential intractability of asymmetric scenarios.18 This report aims to delineate the established theoretical framework for tackling this problem, outlining the standard methodology while also highlighting the inherent difficulties and limitations, particularly concerning the derivation of explicit, closed-form solutions.
+
+1.3 Report Roadmap
+This report systematically explores the theoretical landscape of asymmetric first-price auctions. We begin by establishing the symmetric benchmark (Section 2), detailing the standard IPV model and the derivation of the symmetric Bayesian Nash Equilibrium (BNE) bidding strategy, including the well-known solution for the uniform distribution case. Section 3 formally introduces asymmetry, explaining how it fundamentally alters the strategic problem and increases its complexity. Section 4 discusses the Bayesian Nash Equilibrium concept in the asymmetric context, including results on existence and uniqueness. Section 5 provides a detailed derivation of the system of coupled ordinary differential equations (ODEs) that characterizes the inverse equilibrium bidding functions in the asymmetric setting. Section 6 delves into the challenges of solving this system, discussing boundary conditions, the specific difficulties posed by asymmetric supports, and common solution techniques (analytical, numerical, and alternative approaches). Section 7 presents illustrative examples, focusing on the analytically tractable case of asymmetric uniform distributions. Section 8 analyzes key properties of asymmetric equilibria, comparing them to the symmetric case regarding bidding behavior, efficiency, and revenue implications, including the impact of resale possibilities. Finally, Section 9 concludes by directly addressing the core question, summarizing the available methodology and its limitations.
+
+2. The Symmetric Benchmark: First-Price Auctions with IPV
+2.1 Model Setup
+The standard model for a symmetric first-price sealed-bid auction with independent private values involves the following components 2:
+
+Bidders: A set N={1,...,n} of n≥2 risk-neutral bidders competes for a single item.5 Risk neutrality implies bidders maximize expected monetary payoffs.
+Valuations: Each bidder i has a private value vi​ for the item. This value represents bidder i's maximum willingness to pay. The values (v1​,...,vn​) are drawn independently and identically (i.i.d.) from a common probability distribution F, which is assumed to be continuous and strictly increasing with density function f(v)=F′(v) over a support interval, often normalized to or denoted generally as \[v​,vˉ\].2 The distribution F is common knowledge among all bidders. * **Auction Rules:** Bidders simultaneously submit sealed bids bi​. The bidder submitting the highest bid wins the item and pays their bid amount. In case of a tie for the highest bid, a tie-breaking rule is needed (e.g., a random draw among the highest bidders).1 The probability of a tie occurring with continuous value distributions is typically zero.12 * **Payoffs:** Bidder i's payoff (or surplus) ui​ is defined as: u_i = \begin{cases} v_i - b_i & \text{if } b_i > b_j \text{ for all } j \neq i \ \frac{1}{k}(v_i - b_i) & \text{if } b_i \text{ is tied for the highest bid with } k-1 \text{ others} \ 0 & \text{if } b_i < \max_{j \neq i} b_j \end{cases} .1 Given the focus on continuous distributions where ties have zero probability, the payoff structure simplifies to vi​−bi​ if bi​ is the unique highest bid, and 0 otherwise. As noted earlier, bidding bi​=vi​ yields a payoff of 0 regardless of winning or losing. Bidding bi​\>vi​ risks a negative payoff if the bidder wins. Therefore, rational bidders will choose bids bi​∈\[0,vi​), engaging in strategic "bid shading".1 The optimal level of shading depends on the perceived competition, specifically the distribution of bids expected from rivals.1 ### **2.2 Bayesian Nash Equilibrium (BNE)** Since bidders know their own value but not the values (and thus the optimal bids) of their opponents, this auction represents a game of incomplete information, specifically a Bayesian game.1 The appropriate solution concept for such games is the Bayesian Nash Equilibrium (BNE).1 A BNE consists of a strategy profile, where each bidder i has a bidding strategy (or bid function) bi​(vi​) that specifies the bid to submit for every possible value vi​ they might possess. This strategy profile (b1∗​(⋅),...,bn∗​(⋅)) constitutes a BNE if, for every bidder i and every possible value vi​, the bid bi∗​(vi​) maximizes bidder i's expected payoff, given that all other bidders j=i are following their respective equilibrium strategies bj∗​(⋅) and given bidder i's beliefs about the other bidders' values (which are determined by the common knowledge distribution F).12 In the symmetric IPV setting, it is natural to look for a *symmetric* BNE, where all bidders employ the same bidding strategy b∗(⋅).2 Furthermore, analysis typically focuses on equilibria where the bidding strategy b∗(v) is strictly increasing and differentiable in the bidder's value v.2 This implies that bidders with higher values submit higher bids, which is intuitively plausible. ### **2.3 Deriving the Symmetric BNE** The derivation proceeds by considering a representative bidder i and finding their optimal bid, assuming all other bidders j=i follow a conjectured symmetric, increasing, and differentiable strategy b(v).7 **Expected Payoff:** Suppose bidder i has value vi​ and considers submitting a bid bi​. They win if their bid bi​ is higher than all other n−1 bids, i.e., bi​\>b(vj​) for all j=i. Since b(⋅) is strictly increasing, it has a well-defined inverse function b−1(⋅). The winning condition is equivalent to b−1(bi​)\>vj​ for all j=i. The probability that a single opponent j's value vj​ is less than b−1(bi​) is given by the cumulative distribution function (CDF) F(b−1(bi​)). Since values are drawn independently, the probability that all n−1 opponents have values less than b−1(bi​) is \[F(b−1(bi​))\]n−1.2 Bidder i's expected payoff from bidding bi​ is therefore: U(b_i, v_i) = (v_i - b_i) \times \text{Pr}(\text{Win} | \text{bid } b_i) = (v_i - b_i) [F(b^{-1}(b_i))]^{n-1}
+.
+2
+F
+i
+r
+s
+t
+−
+O
+r
+d
+e
+r
+C
+o
+n
+d
+i
+t
+i
+o
+n
+(
+F
+O
+C
+)
+:
+B
+i
+d
+d
+e
+r
+i
+c
+h
+o
+o
+s
+e
+s
+b
+i
+​
+t
+o
+m
+a
+x
+i
+m
+i
+z
+e
+U
+(
+b
+i
+​
+,
+v
+i
+​
+)
+.
+W
+e
+f
+i
+n
+d
+t
+h
+e
+o
+p
+t
+i
+m
+a
+l
+b
+i
+d
+b
+y
+t
+a
+k
+i
+n
+g
+t
+h
+e
+d
+e
+r
+i
+v
+a
+t
+i
+v
+e
+w
+i
+t
+h
+r
+e
+s
+p
+e
+c
+t
+t
+o
+b
+i
+​
+a
+n
+d
+s
+e
+t
+t
+i
+n
+g
+i
+t
+t
+o
+z
+e
+r
+o
+.
+U
+s
+i
+n
+g
+t
+h
+e
+p
+r
+o
+d
+u
+c
+t
+r
+u
+l
+e
+a
+n
+d
+t
+h
+e
+c
+h
+a
+i
+n
+r
+u
+l
+e
+:
+.2First−OrderCondition(FOC):Bidderichoosesbi​tomaximizeU(bi​,vi​).Wefindtheoptimalbidbytakingthederivativewithrespecttobi​andsettingittozero.Usingtheproductruleandthechainrule:
+\frac{\partial U}{\partial b_i} = -[F(b^{-1}(b_i))]^{n-1} + (v_i - b_i) (n-1) [F(b^{-1}(b_i))]^{n-2} f(b^{-1}(b_i)) \frac{d}{db_i}[b^{-1}(b_i)] Recognizing that dbi​d​\[b−1(bi​)\]=b′(b−1(bi​))1​, the FOC is: -[F(b^{-1}(b_i))]^{n-1} + (v_i - b_i) (n-1) [F(b^{-1}(b_i))]^{n-2} f(b^{-1}(b_i)) \frac{1}{b'(b^{-1}(b_i))} = 0 .2 Imposing Symmetry: In a symmetric equilibrium, the optimal bid bi​ chosen by bidder i must be consistent with the assumed strategy b(⋅). That is, the optimal bid for value vi​ must be bi​=b(vi​). This implies b−1(bi​)=vi​. Substituting bi​=b(vi​) and b−1(bi​)=vi​ into the FOC yields: −\[F(vi​)\]n−1+(vi​−b(vi​))(n−1)\[F(vi​)\]n−2f(vi​)b′(vi​)1​=0 .7 Differential Equation and Solution: Rearranging this equation gives a first-order ordinary differential equation (ODE) for the equilibrium bid function b(v) (dropping the subscript i): b′(v)\[F(v)\]n−1=(v−b(v))(n−1)\[F(v)\]n−2f(v) b′(v)=(v−b(v))F(v)(n−1)f(v)​.7 This equation captures the equilibrium trade-off: the marginal cost of increasing the bid (the left side, related to b′(v) scaled by the probability of winning) must equal the marginal benefit (the increase in the probability of winning, (n−1)Fn−2f/b′, multiplied by the surplus v−b). To solve this ODE, we need a boundary condition. It can be shown that a bidder with the lowest possible value v​ must bid v​ in equilibrium (i.e., b(v​)=v​). If v​=0, then b(0)=0. Solving the ODE with this boundary condition yields the unique symmetric BNE bidding strategy 7: b(v)=v−\[F(v)\]n−1∫v​v​\[F(x)\]n−1dx​.6 An alternative interpretation of this solution comes from applying the Envelope Theorem to the bidder's maximization problem.15 This leads to the insight that the equilibrium bid b(v) is equal to the expected value of the highest valuation among the other n−1 bidders, conditional on that highest valuation being less than or equal to v 2: b(v)=E\[j=imax​vj​∣j=imax​vj​≤v\] This formulation clearly shows the bid shading: the bid is not the value v, but the expected value of the highest competitor one might beat. ### **2.4 Example: Uniform Distribution** A commonly used example is when bidder values are drawn i.i.d. from the uniform distribution on . In this case, F(v)=v and f(v)=1 for $v \in $, and v​=0. Plugging these into the solution formula:
+b(v) \= v \- \\frac{\\int\_{0}^{v} x^{n-1} dx}{v^{n-1}} \= v \- \\frac{\[x^n / n\]\_0^v}{v^{n-1}} \= v \- \\frac{v^n / n}{v^{n-1}} \= v \- \\frac{v}{n} b(v) \= \\left(\\frac{n-1}{n}\\right) v
+
+.13 Thus, in the symmetric uniform case, each bidder optimally bids a constant fraction nn−1​ of their true value. This simple linear strategy provides a useful benchmark for comparison with the asymmetric case. For two bidders (n=2), the strategy is b(v)=v/2.5
+
+3. Introducing Asymmetry: Model and Challenges
+3.1 Defining Ex-Ante Asymmetry
+We now shift focus to the primary subject of this report: first-price sealed-bid auctions with two bidders (n=2) who are ex-ante asymmetric. The asymmetry arises because the bidders' private values, v1​ and v2​, are drawn independently from different probability distributions, F1​ and F2​, respectively, where F1​=F2​.9 These distributions are assumed to be continuous with densities f1​ and f2​. The supports of these distributions, [v​1​,vˉ1​] and [v​2​,vˉ2​], may also differ.9 This setup captures situations where bidders might have different underlying costs, market information, or perceived advantages, leading to statistically different valuations for the same item.
+
+3.2 Why Symmetry Breaks Down
+In the symmetric case, all bidders face statistically identical opponents, and the problem possesses a symmetry that allows us to look for a single, common bidding strategy b(v). When F1​=F2​, this symmetry is broken. Bidder 1 knows their value v1​ is drawn from F1​ and believes bidder 2's value v2​ is drawn from F2​. Conversely, bidder 2 knows their value v2​ is drawn from F2​ and believes bidder 1's value v1​ is drawn from F1​.
+
+Since the distributions F1​ and F2​ differ, the strategic problems faced by the two bidders are no longer identical. Bidder 1's optimal bid b1​(v1​) will depend on the distribution F2​ and the anticipated strategy b2​(v2​) of bidder 2. Similarly, bidder 2's optimal bid b2​(v2​) will depend on F1​ and the anticipated strategy b1​(v1​). There is no a priori reason to expect that the optimal functional forms for b1​(⋅) and b2​(⋅) will be the same. Consequently, the analysis must allow for distinct equilibrium bidding strategies for each bidder.
+
+3.3 Increased Complexity
+The move from a symmetric to an asymmetric setting significantly increases the analytical complexity. Instead of solving for a single bid function b(v), we must now solve for a pair of functions, (b1​(v1​),b2​(v2​)), that are mutually best responses. This interdependence introduces considerable mathematical challenges.
+
+The complexity of asymmetric auctions was recognized early in the literature.18 While the existence of a symmetric BNE in the i.i.d. case is relatively straightforward to establish, proving the existence of equilibrium in the general asymmetric IPV case required more sophisticated techniques and was achieved later.9 The characterization and computation of these asymmetric equilibria remain challenging tasks, often lacking closed-form solutions.14 The fundamental reason for this complexity lies in the coupled nature of the bidders' optimization problems, where each bidder's optimal action depends directly on the differing characteristics and anticipated strategy of their specific opponent.
+
+4. Bayesian Nash Equilibrium in Asymmetric Auctions
+4.1 BNE as the Solution Concept
+Despite the increased complexity, the Bayesian Nash Equilibrium remains the standard solution concept for analyzing asymmetric first-price auctions with incomplete information.12 An equilibrium is defined as a pair of bidding strategies, (b1∗​(v1​),b2∗​(v2​)), such that:
+
+For every possible value v1​ that bidder 1 might have, the bid b1∗​(v1​) maximizes bidder 1's expected payoff, given that bidder 2 is using strategy b2∗​(v2​).
+For every possible value v2​ that bidder 2 might have, the bid b2∗​(v2​) maximizes bidder 2's expected payoff, given that bidder 1 is using strategy b1∗​(v1​).
+Each strategy must be a best response to the other, taking into account the uncertainty about the opponent's type (value) as described by their respective distribution (F2​ for bidder 1's calculation, F1​ for bidder 2's calculation).
+
+4.2 Existence and Uniqueness
+A crucial theoretical question is whether such a BNE exists and if it is unique.
+
+Existence: The existence of a BNE involving monotonic (specifically, strictly increasing) bidding strategies in asymmetric first-price auctions has been established under fairly general conditions. Lebrun (1999) proved existence for the case where bidders' valuation distributions have a common, bounded interval support.9 Maskin and Riley also contributed significantly to establishing existence.14 These proofs often rely on analyzing the properties of the system of differential equations that characterizes the equilibrium (see Section 5) or using fixed-point arguments.
+Uniqueness: The question of uniqueness is more subtle. In the symmetric case, the monotonic equilibrium is typically unique. In the asymmetric case with common support, the monotonic equilibrium is also often unique.9 Hafalir and Krishna (2008) show uniqueness for the monotonic equilibrium in a two-bidder asymmetric auction with resale under certain conditions.18 For discrete value distributions, uniqueness results have been established without strong assumptions on the distributions themselves.27 However, demonstrating uniqueness in the continuous case generally requires careful analysis of the differential equation system and associated boundary conditions.26
+The fact that establishing existence and uniqueness in asymmetric settings is considerably more involved than in the symmetric case underscores the fundamental difficulty introduced by the heterogeneity of bidders. The coupled nature of the best-response functions requires more sophisticated mathematical tools to guarantee that a well-behaved equilibrium solution exists and is the only one possible within the class of monotonic strategies.
+
+5. Deriving Asymmetric BNE: The System of Differential Equations
+The general method for finding the BNE strategies (b1​(v1​),b2​(v2​)) involves setting up the expected payoff maximization problem for each bidder and deriving the first-order conditions, which ultimately lead to a system of coupled ordinary differential equations.
+
+5.1 Bidder Payoff Maximization
+Assume bidder 1 has value v1​ and bidder 2 has value v2​. Let b1​(v1​) and b2​(v2​) be their respective equilibrium bidding strategies, which we assume are strictly increasing and differentiable.
+
+Bidder 1 chooses a bid b1​ to maximize their expected payoff: U1​(b1​,v1​)=(v1​−b1​)×Pr(b2​(v2​)≤b1​)
+Bidder 2 chooses a bid b2​ to maximize their expected payoff: U2​(b2​,v2​)=(v2​−b2​)×Pr(b1​(v1​)≤b2​)
+5.2 Probability of Winning
+Since the strategies b1​(⋅) and b2​(⋅) are assumed strictly increasing, they have well-defined inverse functions, α1​(⋅) and α2​(⋅), where αi​(b) gives the value vi​ such that bidder i bids b (i.e., bi​(αi​(b))=b). The probabilities of winning can be expressed in terms of these inverse functions and the opponents' value distributions:
+
+For bidder 1, the probability of winning with bid b1​ is the probability that bidder 2's bid is less than or equal to b1​: Pr(b2​(v2​)≤b1​)=Pr(v2​≤α2​(b1​))=F2​(α2​(b1​))
+For bidder 2, the probability of winning with bid b2​ is: Pr(b1​(v1​)≤b2​)=Pr(v1​≤α1​(b2​))=F1​(α1​(b2​))
+The expected payoffs are thus:
+
+U1​(b1​,v1​)=(v1​−b1​)F2​(α2​(b1​))
+
+U2​(b2​,v2​)=(v2​−b2​)F1​(α1​(b2​))
+
+5.3 First-Order Conditions (FOCs)
+To find the optimal bids, we differentiate each bidder's expected payoff with respect to their own bid and set the result to zero.
+
+For Bidder 1 (differentiating U1​ w.r.t. b1​): \\frac{\\partial U\_1}{\\partial b\_1} \= \-F\_2(\\alpha\_2(b\_1)) \+ (v\_1 \- b\_1) \\frac{d}{db\_1}\[F\_2(\\alpha\_2(b\_1))\] \= 0 Using the chain rule, db1​d​[F2​(α2​(b1​))]=f2​(α2​(b1​))α2′​(b1​). So the FOC for bidder 1 is: −F2​(α2​(b1​))+(v1​−b1​)f2​(α2​(b1​))α2′​(b1​)=0
+For Bidder 2 (differentiating U2​ w.r.t. b2​): \\frac{\\partial U\_2}{\\partial b\_2} \= \-F\_1(\\alpha\_1(b\_2)) \+ (v\_2 \- b\_2) \\frac{d}{db\_2}\[F\_1(\\alpha\_1(b\_2))\] \= 0 Using the chain rule, db2​d​[F1​(α1​(b2​))]=f1​(α1​(b2​))α1′​(b2​). So the FOC for bidder 2 is: −F1​(α1​(b2​))+(v2​−b2​)f1​(α1​(b2​))α1′​(b2​)=0
+5.4 The System of Coupled ODEs
+These first-order conditions must hold for the bids chosen in equilibrium. In equilibrium, bidder 1 with value v1​ chooses bid b1​=b1​(v1​), which implies v1​=α1​(b1​). Similarly, v2​=α2​(b2​). It is often more convenient to characterize the equilibrium by considering the inverse bid functions, α1​(b) and α2​(b), which are defined over the range of possible equilibrium bids, say b∈[b​,bˉ].
+
+Substituting v1​=α1​(b) into bidder 1's FOC (evaluated at a bid b) and v2​=α2​(b) into bidder 2's FOC (evaluated at the same bid b), we obtain a system of two coupled, first-order ordinary differential equations (ODEs) that the inverse bid functions must satisfy:
+
+(α1​(b)−b)f2​(α2​(b))α2′​(b)=F2​(α2​(b))(ODE1​)
+
+(α2​(b)−b)f1​(α1​(b))α1′​(b)=F1​(α1​(b))(ODE2​)
+
+.7
+
+This system represents the core mathematical characterization of the BNE in a two-bidder asymmetric first-price auction. The coupling is evident: ODE1​, which primarily relates to bidder 1's value α1​(b), involves the function α2​(b) and its derivative α2′​(b). Symmetrically, ODE2​ involves α1​(b) and α1′​(b). This interdependence arises directly from the strategic nature of the auction: bidder 1's optimal bidding behavior (reflected in α1′​(b)) depends on bidder 2's value distribution (f2​) and bidding behavior (α2​(b), α2′​(b)), and vice versa. This system must be solved simultaneously to find the equilibrium inverse bid functions α1​(b) and α2​(b).
+
+6. Solving the System: Methods and Difficulties
+While the system of ODEs provides a general characterization of the asymmetric BNE, obtaining a solution is often challenging.
+
+6.1 Boundary Value Problem (BVP)
+The system of two first-order ODEs requires boundary conditions to determine a unique solution for α1​(b) and α2​(b).
+
+Lower Boundary: If the supports share a common lower bound v​ (e.g., v​1​=v​2​=v​), and there is no reserve price above v​, then the lowest possible bid in equilibrium is b​=v​. The boundary conditions are α1​(v​)=v​ and α2​(v​)=v​. If the lower bounds differ, say v​1​<v​2​, the situation is more complex. Bidder 1 with value v​1​ might bid v​1​, but bidder 2 would never bid below v​2​. The lowest equilibrium bid b​ might be determined by the lowest value bidder who has a positive probability of winning.
+Upper Boundary: A significant difficulty arises at the upper end of the bid range. Let bˉ be the maximum possible equilibrium bid. In equilibrium, this maximum bid must be reached by both bidders when they have their respective maximum values (assuming common upper support vˉ for simplicity first, i.e., vˉ1​=vˉ2​=vˉ). Thus, we must have α1​(bˉ)=vˉ and α2​(bˉ)=vˉ. If the upper supports differ, say vˉ1​<vˉ2​, then bidder 1 reaches their maximum value at some bid η=b1​(vˉ1​), while bidder 2 reaches their maximum value at the same maximum bid η=b2​(vˉ2​). So the conditions become α1​(η)=vˉ1​ and α2​(η)=vˉ2​. The critical issue is that the maximum bid η (or bˉ in the common support case) is endogenous – its value is determined by the equilibrium itself and is not known beforehand.9
+This structure, where conditions are specified at both the lower bound (b​) and the unknown upper bound (η), defines a two-point boundary value problem (BVP). However, it's a non-standard BVP because the location of one endpoint (η) is part of the solution to be found.9 Standard numerical ODE solvers typically handle initial value problems (where all conditions are given at one point) or BVPs with fixed boundaries.
+
+6.2 Challenges with Asymmetric Supports
+The difficulties are compounded when the supports of the value distributions F1​ and F2​ are asymmetric (e.g., F1​ on
+a
+n
+d
+F
+2
+​
+o
+n
+andF2​on
+).9 As analyzed by Dharanan (2022), Lebrun's (2006) characterization approach runs into computational problems.9
+
+Consider the example F1​=U and F2​=U. Let η be the maximum bid. The characterization implies α1​(η)=10 and α2​(η)=8. However, the structure of the competition changes at the bid level b2​(8). For bids b<b2​(8), both bidders are potentially active, and the ODE system involves both α1​ and α2​. For bids b∈[b2​(8),η], bidder 2 has reached their maximum value, and effectively only bidder 1's strategy is evolving (or the nature of the ODE system changes, potentially simplifying if bidder 2 drops out or bids deterministically).
+
+The problem is that the intermediate bid value b2​(8) and the corresponding value for bidder 1, α1​(b2​(8)), are unknown a priori. Without these intermediate boundary values, the ODE system cannot be solved piecewise using standard numerical BVP solvers. The problem transforms from a potentially solvable (though difficult) BVP into an ill-posed system where the intervals of integration and necessary boundary/connecting conditions are missing.9 This makes numerical computation using standard techniques practically impossible, even though existence theorems guarantee a solution exists analytically.9
+
+6.3 Solution Techniques
+Given these challenges, several approaches are used to analyze and solve for asymmetric equilibria:
+
+Analytical Solutions: These provide exact closed-form expressions for the bid functions. However, they are extremely rare and have only been found for very specific pairs of distributions, primarily variants of uniform distributions 14 and certain power distributions.27 Finding new analytical solutions remains a difficult task.
+Numerical Methods: Due to the lack of general analytical solutions, numerical techniques are frequently employed to approximate the equilibrium bid functions.14 Common methods include:
+Shooting Methods: These involve guessing the unknown upper bid η, treating the ODE system as an initial value problem starting from the lower boundary, and solving forward. The guess for η is adjusted iteratively until the solution satisfies the required conditions at the upper value bounds (α1​(η)=vˉ1​, α2​(η)=vˉ2​).17 This can be sensitive to initial guesses and may face convergence issues.
+Relaxation Methods / Finite Difference Methods: These methods discretize the bid interval and approximate the differential equations as a system of algebraic equations, which is then solved simultaneously.
+Perturbation Methods: These techniques find approximate solutions when the asymmetry is small, treating the asymmetric case as a perturbation of a known symmetric solution.9
+Specialized BVP Solvers: Algorithms designed specifically for BVPs, potentially adapted to handle the unknown endpoint η.9
+Taylor Series Expansions: Using recursive piecewise Taylor expansions to approximate the solution.35
+Alternative Approaches: Some research circumvents the need to solve the ODEs directly by focusing on characterizing properties of the equilibrium. For instance, analyzing the ratio of bidders' expected payoffs 14 or their winning probabilities 15 can reveal insights into relative bidding aggressiveness and efficiency without requiring explicit bid functions.
+In essence, while a general conceptual framework based on ODEs exists, the practical implementation for arbitrary asymmetric distributions typically requires resorting to numerical approximations. The primary obstacles are the unknown upper bid boundary η and the structural breakdown of the BVP formulation when value supports are asymmetric, making computation non-trivial.9
+
+7. Illustrative Example: Asymmetric Uniform Distributions
+The case where both bidders' values are drawn from uniform distributions, but over potentially different intervals, is the most extensively studied asymmetric scenario yielding analytical solutions.18 It serves as a crucial benchmark and provides concrete illustrations of asymmetric equilibrium behavior.
+
+7.1 Importance
+Solving the uniform case provides valuable insights and test cases for understanding the effects of asymmetry. The tractability allows for explicit comparison of bidding strategies, efficiency, and revenue implications under different forms of asymmetry (e.g., differences in means vs. differences in variances/support lengths).
+
+7.2 Case 1: U[0, ω<sub>1</sub>] vs U[0, ω<sub>2</sub>] (ω<sub>1</sub> ≠ ω<sub>2</sub>)
+This is a common textbook example where both distributions start at 0 but have different upper bounds. Assume ω1​=ω2​. The equilibrium bidding strategy for bidder i (where j is the other bidder) is given by 36:
+
+σi​(vi​)=ki​vi​1​(1−1−ki​vi2​​)
+
+where the constant ki​ captures the asymmetry:
+
+ki​=ωi2​1​−ωj2​1​
+
+This explicit formula, referenced in Krishna (2010) 36, shows that each bidder's strategy depends not only on their own value vi​ and distribution limit ωi​, but also crucially on the opponent's distribution limit ωj​. The formula is valid for vi​ up to ωi​. Note that if ωi​=ωj​, then ki​=0, and a limit argument recovers the symmetric linear strategy b(vi​)=vi​/2 (for n=2).
+
+7.3 Case 2: General Uniform U[v<sub>1L</sub>, v<sub>1H</sub>] vs U[v<sub>2L</sub>, v<sub>2H</sub>]
+Kaplan and Zamir (2012) provided comprehensive analytical solutions for the general case of two bidders with uniform distributions U[v1L​,v1H​] and U[v2L​,v2H​], allowing for different lower (L) and upper (H) bounds, and incorporating a minimum bid (reserve price) m≥0.30
+
+Their solutions are significantly more complex than the U[0,ωi​] case and involve different functional forms depending on the relationship between the minimum bid m and the distribution parameters. The structure of the solution changes at critical thresholds, such as when the minimum bid m ceases to be binding relative to the lowest valuations, or when m equals the maximum of the lower bounds (max{v1L​,v2L​}), or at thresholds related to the upper bounds (like m=(v1H​+v2L​)/2, assuming v1H​≤v2L​).31
+
+The explicit formulas for the inverse bid functions α1​(b) and α2​(b) involve combinations of linear terms, square roots, and exponential functions, with constants determined by the boundary conditions specific to each parameter region.31 Due to their complexity and dependence on specific parameter regimes, reproducing the full set of solutions here is impractical, but the key takeaway is that analytical solutions exist, albeit intricate ones, for this general uniform case. These solutions cover scenarios where asymmetry arises from shifts in the support (different lower bounds), stretches (different upper bounds), or both, with or without a binding reserve price.
+
+7.4 Linear Bidding Example
+Interestingly, within the general uniform framework, Kaplan and Zamir identified a specific class of asymmetric distributions for which the equilibrium bid functions are linear, providing a neat generalization of the symmetric b(v)=v/2 result.31 For a given minimum bid m≥0, if the distributions are U[v1L​,v1H​] and U[v2L​,v2H​] satisfying certain conditions related to m (specifically, conditions ensuring b1​(v)=v/2+m/2 and b2​(v)=v/2+m/4 form an equilibrium, which requires specific relationships between viL​,viH​ and m), then these linear functions constitute the BNE. This provides a tractable example where asymmetry does not lead to highly non-linear strategies.
+
+Table: Equilibrium Bids for Asymmetric Uniform Distributions (2 Bidders)
+Scenario	Conditions / Parameters	Bidder 1 Strategy (σ<sub>1</sub>(v<sub>1</sub>)) / Inverse (α<sub>1</sub>(b))	Bidder 2 Strategy (σ<sub>2</sub>(v<sub>2</sub>)) / Inverse (α<sub>2</sub>(b))	Source
+U[0,ω1​] vs U[0,ω2​]	ω1​=ω2​, m=0	σ1​(v1​)=k1​v1​1​(1−1−k1​v12​​) where k1​=ω12​1​−ω22​1​	σ2​(v2​)=k2​v2​1​(1−1−k2​v22​​) where k2​=ω22​1​−ω12​1​	Krishna (2010) via 36
+U[v1L​,v1H​] vs U[v2L​,v2H​]	General supports, m≥0	Complex analytical forms involving viL​,viH​,m,b. See source for details.	Complex analytical forms involving viL​,viH​,m,b. See source for details.	Kaplan & Zamir (2012) via 30
+Linear Equilibrium Case	Specific U[v1L​,v1H​], U[v2L​,v2H​] related to m≥0	σ1​(v1​)=v1​/2+m/2	σ2​(v2​)=v2​/2+m/4 (under conditions where Bidder 2 is 'stronger')	Kaplan & Zamir (2012) via 31
+8. Properties of Asymmetric Equilibria
+Introducing asymmetry between bidders significantly alters the properties of the first-price auction equilibrium compared to the symmetric benchmark. Key differences emerge in bidding behavior, allocation efficiency, and seller revenue.
+
+8.1 Bidding Strategies: Strong vs. Weak Bidders
+A common way to conceptualize asymmetry is through the notion of "strong" and "weak" bidders. Bidder i is considered stronger than bidder j if Fi​'s distribution first-order stochastically dominates (FOSD) Fj​'s distribution. This means that for any value v, the probability of having a value less than or equal to v is lower for the strong bidder (Fi​(v)≤Fj​(v) for all v, with strict inequality for some v).14 Intuitively, the strong bidder is more likely to have higher values.
+
+Relative Aggressiveness: A somewhat counter-intuitive but robust finding is that the weak bidder often bids more aggressively than the strong bidder, relative to what their symmetric counterpart would bid.24 Facing a statistically stronger opponent, the weak bidder needs to bid closer to their value (shade less) to maintain a reasonable chance of winning. Conversely, the strong bidder, anticipating weaker competition, can afford to shade their bid more heavily.24 Kirkegaard (2009) provides a framework linking this relative aggressiveness to the comparison between the ratio of expected payoffs and the ratio of the CDFs: bidder i bids more aggressively than bidder j (bi​(v)>bj​(v)) if and only if their payoff ratio exceeds their CDF ratio (EUi​(v)/EUj​(v)>Fj​(v)/Fi​(v)).14
+Bid Distributions: Despite potentially shading more, the strong bidder's overall distribution of bids typically first-order stochastically dominates the weak bidder's bid distribution.24 This means the strong bidder is statistically more likely to submit higher bids overall.
+Crossing Strategies: If neither distribution FOSD the other (i.e., the CDFs cross), then the bidding strategies b1​(v) and b2​(v) may also cross.14 Kirkegaard shows that FOSD is necessary for one bidder to be consistently more aggressive than the other, and bounds the number of crossings of the bid functions based on the properties of the ratio of the CDFs.14
+8.2 Efficiency
+In symmetric IPV auctions, the equilibrium is typically efficient: the bidder with the highest value submits the highest bid and wins the item. Asymmetric first-price auctions, however, are generally inefficient.18 The bidder with the highest valuation does not always win.
+
+This inefficiency arises precisely because of the differences in bidding strategies. For instance, a weak bidder with value vW​ might bid more aggressively than a strong bidder with a slightly higher value vS​. If bW​(vW​)>bS​(vS​) despite vW​<vS​, the less valuable bidder (weak) wins, leading to an inefficient allocation.37 The extent of this inefficiency depends on the degree and nature of the asymmetry between F1​ and F2​.14
+
+8.3 Revenue Implications
+Perhaps the most significant consequence of asymmetry concerns seller revenue and the comparison between different auction formats.
+
+Revenue Equivalence Failure: The celebrated Revenue Equivalence Theorem (RET) states that under standard symmetric IPV conditions (risk-neutral bidders, values from the same distribution, lowest type gets zero surplus, allocation goes to highest value bidder), the expected revenue for the seller is the same across several common auction formats, including the first-price, second-price, English, and Dutch auctions.2 This theorem breaks down completely in the presence of bidder asymmetry.16 Different auction formats generally yield different expected revenues when bidders are asymmetric.
+Revenue Ranking: Since RET fails, a natural question is whether one format consistently yields higher revenue than another in asymmetric settings. The answer is generally no; the revenue ranking depends crucially on the specific forms of the asymmetric distributions F1​ and F2​.24
+Maskin and Riley (2000) provide examples showing that the first-price (high-bid) auction can yield higher revenue than the second-price (or English/open) auction under certain asymmetries (e.g., when one distribution is a 'stretch' or 'shift' of the other).24 This can happen because the strong bidder might be induced to bid relatively high in the first-price format to deter the weak bidder, while in the second-price format they only pay the weak bidder's potentially low bid.
+Conversely, they show other asymmetries where the second-price/English auction yields higher revenue.24 This might occur if the strong bidder has significant probability mass at lower values, leading them to bid very low ('low-ball') in the first-price auction, depressing revenue.
+Numerical studies often find that when one distribution FOSD the other, the first-price auction tends to yield higher expected revenue than the second-price auction.35 Results for linear equilibria in the uniform case also suggest first-price revenue can exceed second-price revenue.28
+Impact of Resale: The possibility of post-auction trade between the winner and the loser can significantly alter the analysis. Hafalir and Krishna (2008) studied a model with two asymmetric bidders where the auction winner can make a take-it-or-leave-it resale offer to the loser.18 They found that:
+The first-price auction with this form of resale has a unique monotonic equilibrium.18
+Crucially, with resale, the first-price auction generates strictly higher expected revenue than the second-price auction (also with resale) under standard assumptions.18 The potential for resale introduces a 'symmetrization' effect, as bidders anticipate the possibility of capturing surplus through post-auction negotiation, which influences their initial bids, often making them more similar across types.25 This restored revenue ranking (FP > SP with resale) is a notable contrast to the ambiguous ranking without resale.
+In summary, asymmetry introduces inefficiency and breaks down the standard revenue equivalence results. The comparison between auction formats becomes context-dependent, influenced by the specific nature of the bidders' different value distributions. The potential for resale adds another layer of complexity but can, under certain models, lead to a clearer revenue ranking.
+
+9. Conclusion
+9.1 Answering the Core Question
+The central question motivating this report was whether a general method exists for solving first-price sealed-bid auctions with two ex-ante asymmetric bidders having independent private values. Based on the established theoretical literature, the answer is nuanced:
+
+Yes, a general conceptual method exists. This method involves modeling the auction as a Bayesian game and identifying the Bayesian Nash Equilibrium. The core of this method is to set up the expected payoff maximization problem for each bidder, derive the first-order conditions for optimal bidding, and recognize that these conditions implicitly define a system of two coupled, first-order ordinary differential equations (ODEs) that characterize the bidders' inverse equilibrium bidding strategies, α1​(b) and α2​(b). This framework provides a universal approach to describing the equilibrium structure.
+9.2 The Limits of Generality
+No, there is no general analytical solution method for the resulting system of ODEs. While the ODE system provides a theoretical characterization, obtaining explicit, closed-form solutions for the bid functions b1​(v1​) and b2​(v2​) (or their inverses) is generally impossible. Analytical solutions have only been found for a very limited set of specific distribution pairs, most notably uniform distributions and certain power distributions. For arbitrary asymmetric distributions F1​ and F2​, solving the ODE system typically requires resorting to numerical approximation techniques.
+Furthermore, significant computational challenges arise, particularly the determination of the endogenous upper bid boundary (η) required for the boundary value problem formulation, and the breakdown of standard BVP solution methods when the bidders' value distributions have asymmetric supports.
+
+9.3 Key Takeaways
+The analysis of asymmetric first-price auctions reveals several crucial departures from the simpler symmetric case:
+
+Distinct Strategies: Asymmetric bidders employ different equilibrium bidding strategies, reflecting their differing probabilistic assessments of the competition.
+Inefficiency: Allocations are generally inefficient, as the bidder with the highest value may not place the highest bid due to strategic differences.
+Revenue Non-Equivalence: The Revenue Equivalence Theorem fails, and the expected revenue ranking of different auction formats (first-price vs. second-price/English) depends heavily on the specific nature of the asymmetry.
+Complexity: Characterizing and computing equilibria is mathematically demanding, often relying on solving systems of coupled ODEs numerically.
+Context Matters: Factors like the specific shapes of the value distributions and the possibility of post-auction resale can significantly influence bidding behavior, efficiency, and revenue outcomes.
+In conclusion, while economic theory provides a robust framework for conceptualizing and characterizing equilibrium in asymmetric first-price auctions via Bayesian Nash Equilibrium and systems of differential equations, the practical derivation of explicit solutions remains a significant challenge limited to special cases. For general applications, numerical methods or alternative analytical approaches focusing on qualitative properties are often necessary.
